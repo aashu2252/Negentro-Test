@@ -9,37 +9,37 @@ export const WorkflowsSection: React.FC = () => {
 			id: "01",
 			title: t.workflows.card1Title,
 			desc: t.workflows.card1Desc,
-			image: "/assets/AI Agents.svg",
+			image: "/assets/AI Agents.webp",
 		},
 		{
 			id: "02",
 			title: t.workflows.card2Title,
 			desc: t.workflows.card2Desc,
-			image: "/assets/Conversational AI.svg",
+			image: "/assets/Conversational AI.webp",
 		},
 		{
 			id: "03",
 			title: t.workflows.card3Title,
 			desc: t.workflows.card3Desc,
-			image: "/assets/RAG Systems.svg",
+			image: "/assets/RAG Systems.webp",
 		},
 		{
 			id: "04",
 			title: t.workflows.card4Title,
 			desc: t.workflows.card4Desc,
-			image: "/assets/Enterprise Knowledge.svg",
+			image: "/assets/Enterprise Knowledge.webp",
 		},
 		{
 			id: "05",
 			title: t.workflows.card5Title,
 			desc: t.workflows.card5Desc,
-			image: "/assets/High-Stakes.svg",
+			image: "/assets/High-Stakes.webp",
 		},
 		{
 			id: "06",
 			title: t.workflows.card6Title,
 			desc: t.workflows.card6Desc,
-			image: "/assets/Multi-Agents.svg",
+			image: "/assets/Multi-Agents.webp",
 		},
 	]
 
@@ -68,10 +68,23 @@ export const WorkflowsSection: React.FC = () => {
 					{workflows.map((wf) => (
 						<div
 							key={wf.id}
-							className="group relative flex flex-col justify-between rounded-[18px] bg-white border border-[#E5E2F4] p-6 sm:p-7 shadow-[0_4px_20px_rgba(35,25,105,0.03)] transition-all duration-300 hover:shadow-xl hover:border-[#765DFB]/40 hover:-translate-y-1 overflow-hidden"
+							className="group relative flex flex-col justify-between rounded-[18px] bg-white border border-[#E5E2F4] shadow-[0_4px_20px_rgba(35,25,105,0.03)] transition-all duration-300 hover:shadow-xl hover:border-[#765DFB]/40 hover:-translate-y-1 overflow-hidden"
 						>
+							{/* Isometric Graphic Container */}
+							<div className="relative w-full overflow-hidden flex items-center justify-center aspect-[446/276]">
+								<img
+									src={wf.image}
+									alt={wf.title}
+									loading="eager"
+									decoding="async"
+									width={446}
+									height={276}
+									className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+								/>
+							</div>
+
 							{/* Card Header: Title on Left, Number Tag on Right */}
-							<div>
+							<div className="p-6 sm:p-7 pt-5 sm:pt-6">
 								<div className="flex items-start justify-between gap-2 mb-2">
 									<h3 className="text-xl sm:text-[23px] font-bold text-[#0F1123] tracking-tight group-hover:text-[#765DFB] transition-colors">
 										{wf.title}
@@ -82,22 +95,9 @@ export const WorkflowsSection: React.FC = () => {
 								</div>
 
 								{/* Description */}
-								<p className="text-sm sm:text-[14.5px] text-[#5A5D7A] leading-relaxed font-normal mb-5 min-h-[42px]">
+								<p className="text-sm sm:text-[14.5px] text-[#5A5D7A] leading-relaxed font-normal min-h-[42px]">
 									{wf.desc}
 								</p>
-							</div>
-
-							{/* Isometric Graphic Container */}
-							<div className="relative w-full overflow-hidden flex items-center justify-center aspect-[446/276]">
-								<img
-									src={wf.image}
-									alt={wf.title}
-									loading="lazy"
-									decoding="async"
-									width={446}
-									height={276}
-									className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-								/>
 							</div>
 						</div>
 					))}
