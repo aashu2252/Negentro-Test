@@ -1,7 +1,8 @@
-import type React from "react"
+import React, { useState, useEffect } from "react"
 import { RuixenGradientFooter } from "@/components/ui/ruixen-gradient-footer"
 import { NegentroFooterLogo } from "@/components/ui/negentro-footer-logo"
 import { useLanguage, type Language } from "@/lib/i18n"
+import { getSupabase } from "@/lib/supabase"
 
 export interface FooterProps {
 	onOpenConsole?: () => void
@@ -11,6 +12,25 @@ export const Footer: React.FC<FooterProps> = ({
 	onOpenConsole: _onOpenConsole,
 }) => {
 	const { language, setLanguage, t } = useLanguage()
+	
+	const [industryLinks, setIndustryLinks] = useState<{ title: string; slug: string }[]>([])
+	
+	useEffect(() => {
+		const fetchIndustries = async () => {
+			const client = await getSupabase()
+			if (!client) return
+			const { data } = await client
+				.from("cms_records")
+				.select("title, slug")
+				.eq("kind", "industries")
+				.order("updated_at", { ascending: false })
+				.limit(6)
+			if (data) {
+				setIndustryLinks(data)
+			}
+		}
+		fetchIndustries()
+	}, [])
 
 	const languagesList: { code: Language; label: string }[] = [
 		{ code: "en", label: "En" },
@@ -49,7 +69,9 @@ export const Footer: React.FC<FooterProps> = ({
 
 					{/* Column 1: Developers */}
 					<div className="space-y-3.5">
-						<h4 className="text-sm font-medium text-white">{t.footer.devTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.devTitle}
+						</h4>
 						<ul className="space-y-2.5 text-xs sm:text-sm text-[#8F9FA3]">
 							<li>
 								<a
@@ -104,7 +126,9 @@ export const Footer: React.FC<FooterProps> = ({
 
 					{/* Column 2: Product */}
 					<div className="space-y-3.5">
-						<h4 className="text-sm font-medium text-white">{t.footer.prodTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.prodTitle}
+						</h4>
 						<ul className="space-y-2.5 text-xs sm:text-sm text-[#8F9FA3]">
 							<li>
 								<a
@@ -153,7 +177,9 @@ export const Footer: React.FC<FooterProps> = ({
 
 					{/* Column 3: Company */}
 					<div className="space-y-3.5">
-						<h4 className="text-sm font-medium text-white">{t.footer.compTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.compTitle}
+						</h4>
 						<ul className="space-y-2.5 text-xs sm:text-sm text-[#8F9FA3]">
 							<li>
 								<a
@@ -208,48 +234,65 @@ export const Footer: React.FC<FooterProps> = ({
 
 					{/* Column 4: Usecase */}
 					<div className="space-y-3.5">
-						<h4 className="text-sm font-medium text-white">{t.footer.usecasesTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.usecasesTitle}
+						</h4>
 						<ul className="space-y-2.5 text-xs sm:text-sm text-[#8F9FA3]">
-							<li>
-								<a
-									href="#support"
-									className="hover:text-white transition-colors block"
-								>
-									{t.footer.useSupport}
-								</a>
-							</li>
-							<li>
-								<a
-									href="#healthcare"
-									className="hover:text-white transition-colors block"
-								>
-									{t.footer.useHealth}
-								</a>
-							</li>
-							<li>
-								<a
-									href="#education"
-									className="hover:text-white transition-colors block"
-								>
-									{t.footer.useEdu}
-								</a>
-							</li>
-							<li>
-								<a
-									href="#sales"
-									className="hover:text-white transition-colors block"
-								>
-									{t.footer.useSales}
-								</a>
-							</li>
-							<li>
-								<a
-									href="#ecommerce"
-									className="hover:text-white transition-colors block"
-								>
-									{t.footer.useEcom}
-								</a>
-							</li>
+							{industryLinks.length > 0 ? (
+								industryLinks.map((industry) => (
+									<li key={industry.slug}>
+										<a
+											href={`/industries/${industry.slug}`}
+											className="hover:text-white transition-colors block"
+										>
+											{industry.title}
+										</a>
+									</li>
+								))
+							) : (
+								<>
+									<li>
+										<a
+											href="#support"
+											className="hover:text-white transition-colors block"
+										>
+											{t.footer.useSupport}
+										</a>
+									</li>
+									<li>
+										<a
+											href="#healthcare"
+											className="hover:text-white transition-colors block"
+										>
+											{t.footer.useHealth}
+										</a>
+									</li>
+									<li>
+										<a
+											href="#education"
+											className="hover:text-white transition-colors block"
+										>
+											{t.footer.useEdu}
+										</a>
+									</li>
+									<li>
+										<a
+											href="#sales"
+											className="hover:text-white transition-colors block"
+										>
+											{t.footer.useSales}
+										</a>
+									</li>
+									<li>
+										<a
+											href="#ecommerce"
+											className="hover:text-white transition-colors block"
+										>
+											{t.footer.useEcom}
+										</a>
+									</li>
+								</>
+							)}
 						</ul>
 					</div>
 				</div>
@@ -258,7 +301,9 @@ export const Footer: React.FC<FooterProps> = ({
 				<div className="pt-8 pb-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-end">
 					{/* Left: Contact Us */}
 					<div className="space-y-1.5">
-						<h4 className="text-sm font-medium text-white">{t.footer.contactTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.contactTitle}
+						</h4>
 						<a
 							href={`mailto:${t.footer.contactEmail}`}
 							className="text-xs sm:text-sm text-[#8F9FA3] hover:text-white transition-colors block"
@@ -269,16 +314,16 @@ export const Footer: React.FC<FooterProps> = ({
 
 					{/* Right: Compliance Badges */}
 					<div className="space-y-3 md:text-right">
-						<h4 className="text-sm font-medium text-white">{t.footer.complianceTitle}</h4>
+						<h4 className="text-sm font-medium text-white">
+							{t.footer.complianceTitle}
+						</h4>
 						<div className="flex flex-wrap items-center md:justify-end gap-5 text-xs text-white">
 							{/* SOC 2 Badge */}
 							<div className="flex items-center gap-2">
 								<div className="w-6 h-6 rounded-full bg-[#4846AC] border border-[#765DFB] flex items-center justify-center text-[8px] font-bold text-white shadow-sm">
 									SOC
 								</div>
-								<span className="text-xs text-white/90">
-									{t.footer.soc2}
-								</span>
+								<span className="text-xs text-white/90">{t.footer.soc2}</span>
 							</div>
 
 							{/* GDPR Badge */}
@@ -419,13 +464,7 @@ export const Footer: React.FC<FooterProps> = ({
 									xmlns="http://www.w3.org/2000/svg"
 									className="w-full h-full"
 								>
-									<rect
-										y="100"
-										width="40"
-										height="40"
-										rx="20"
-										fill="white"
-									/>
+									<rect y="100" width="40" height="40" rx="20" fill="white" />
 									<path
 										d="M14.5 113.8C14.5 114.794 13.6941 115.6 12.7 115.6C11.7059 115.6 10.9 114.794 10.9 113.8C10.9 112.806 11.7059 112 12.7 112C13.6941 112 14.5 112.806 14.5 113.8ZM11.1 117.2H14.3V127H11.1V117.2ZM19.3 117.2H22.4V118.6C22.8 117.7 24.1 116.9 25.8 116.9C29 116.9 30.2 118.8 30.2 121.9V127H27V122.4C27 121 26.6 119.8 25 119.8C23.5 119.8 22.5 120.9 22.5 122.6V127H19.3V117.2Z"
 										fill="black"
